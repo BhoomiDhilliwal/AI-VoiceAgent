@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Voice Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top, #f3f0ff, #dcd6ff, #b9aaff);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            animation: fadeInDown 1s ease-in-out;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: #2c227a;
+            margin-bottom: 1rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #4a4a6a;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        /* Layout Container */
+        .main-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        /* Left and Right Panels */
+        .left-panel,
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .left-panel {
+            animation: slideInLeft 1s ease forwards;
+        }
+
+        .right-panel {
+            animation: slideInRight 1s ease forwards;
+        }
+
+        .card {
+            background: #fff;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(90, 70, 180, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            opacity: 0;
+            animation: fadeUp 1.2s ease forwards;
+        }
+
+        .left-panel .card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .left-panel .card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .left-panel .card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        .left-panel .card:nth-child(4) {
+            animation-delay: 0.8s;
+        }
+
+        .right-panel .card:nth-child(1) {
+            animation-delay: 0.3s;
+        }
+
+        .right-panel .card:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(80, 60, 160, 0.25);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .blue {
+            background: #4768ff;
+        }
+
+        .red {
+            background: #ff5252;
+        }
+
+        .orange {
+            background: #ffb341;
+        }
+
+        .green {
+            background: #27ae60;
+        }
+
+        .card span {
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Center AI Image */
+        .center-image {
+            text-align: center;
+            position: relative;
+            animation: fadeIn 1.3s ease forwards;
+        }
+
+        /* Glowing ring animation */
+        .glow-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(133, 118, 255, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulseGlow 3s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .center-image img {
+            width: 240px;
+            height: 240px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 6px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 30px rgba(80, 60, 160, 0.25);
+            background: #fff;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.3s;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .center-image img:hover {
+            transform: scale(1.05);
+        }
+
+        .try-btn {
+            background: #ff784e;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            padding: 0.8rem 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 15px rgba(255, 120, 78, 0.4);
+            transition: 0.3s;
+            position: relative;
+            z-index: 2;
+            animation: fadeUp 1.5s ease forwards;
+            animation-delay: 0.8s;
+        }
+
+        .try-btn:hover {
+            background: #ff9772;
+            transform: scale(1.07);
+            box-shadow: 0 6px 25px rgba(255, 120, 78, 0.6);
+        }
+
+        .try-btn1 {
+            background: #ff784e;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 0.8rem 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 15px rgba(255, 120, 78, 0.4);
+            transition: 0.3s;
+            position: relative;
+            z-index: 2;
+            animation: fadeUp 1.5s ease forwards;
+            animation-delay: 0.8s;
+        }
+
+        /* Footer */
+        footer {
+            background: #000;
+            color: #fff;
+            width: 100%;
+            text-align: center;
+            padding: 2rem 1rem;
+            animation: fadeInUp 1.5s ease forwards;
+        }
+
+        footer .links a {
+            color: #ffd2b6;
+            margin: 0 0.8rem;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        footer .links a:hover {
+            color: #fff;
+        }
+
+        footer .socials {
+            margin-top: 1rem;
+        }
+
+        footer .socials svg {
+            width: 22px;
+            height: 22px;
+            margin: 0 6px;
+            fill: #fff;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        footer .socials svg:hover {
+            fill: #ffd2b6;
+            transform: scale(1.2);
+        }
+
+        footer p {
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 900px) {
+            .main-section {
+                flex-direction: column;
+            }
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-80px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(80px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                opacity: 0.9;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+
+            100% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>AI Voice Agent for Handling Inbound/Outbound Calls</h1>
+        <p>Automate responses to inbound calls, manage customer inquiries 24/7, and route calls effectively.</p>
+    </header>
+    <div>
+        <button class="try-btn1">Create Voice Agent In 30 Seconds</button>
+    </div>
+    <section class="main-section">
+        <!-- LEFT PANEL -->
+        <div class="left-panel">
+            <div class="card">
+                <div class="card-icon blue">📋</div><span>Order Support Agent</span>
+            </div>
+            <div class="card">
+                <div class="card-icon red">📅</div><span>Appointment Assistant</span>
+            </div>
+            <div class="card">
+                <div class="card-icon orange">🛒</div><span>Shopping Assistant</span>
+            </div>
+            <div class="card">
+                <div class="card-icon green">👤</div><span>Insurance Help Agent</span>
+            </div>
+        </div>
+
+        <!-- CENTER IMAGE -->
+        <div class="center-image">
+            <div class="glow-ring"></div>
+            <img src="./aiAgent.png" alt="AI Agent" />
+            <div>
+                <button class="try-btn">Try a Call</button>
+            </div>
+        </div>
+
+        <!-- RIGHT PANEL -->
+        <div class="right-panel">
+            <div class="card">
+                <img src="./aiAgent.png" alt="Elicia" style="width:40px;height:40px;border-radius:50%;" />
+                <span>Call with Elicia</span>
+            </div>
+            <div class="card">
+                <img src="./agentMan.jpg" alt="Mark" style="width:40px;height:40px;border-radius:50%;" />
+                <span>Call with Ankit</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="ai-business-section fade-up">
+        <div class="container">
+            <h2 class="section-title">AI Voice Agents — Built for Real Business Needs</h2>
+            <p class="section-subtitle">
+                Empower your customer interactions with intelligent AI voice solutions that drive engagement, automate
+                tasks, and scale effortlessly.
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3209/3209885.png" alt="24/7 Availability" />
+                    <h3>24/7 Availability</h3>
+                    <p>Your customers get instant support anytime, anywhere — no waiting or downtime.</p>
+                </div>
+                <div class="feature-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3281/3281317.png" alt="Smart Conversations" />
+                    <h3>Smart Conversations</h3>
+                    <p>Natural, human-like interactions powered by real-time voice AI understanding.</p>
+                </div>
+                <div class="feature-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/9692/9692658.png" alt="Scalable Solutions" />
+                    <h3>Scalable Solutions</h3>
+                    <p>Seamlessly handle growing call volumes without increasing manpower.</p>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/747/747310.png"
+                        alt="Books Meetings Automatically" />
+                    <h3>Books Meetings Automatically</h3>
+                    <p>
+                        Effortlessly schedules appointments, saving time and eliminating the need for manual input,
+                        so your team can focus on more important tasks.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/9381/9381135.png"
+                        alt="Screens Leads Efficiently" />
+                    <h3>Screens Leads Efficiently</h3>
+                    <p>
+                        Automatically evaluates and qualifies leads, ensuring your sales team spends their time
+                        on high-quality prospects who are most likely to convert.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3059/3059446.png" alt="Transfers Calls to Human" />
+                    <h3>Transfers Calls to Human</h3>
+                    <p>
+                        Transfers calls to the appropriate department or team member quickly and accurately,
+                        reducing hold times and ensuring faster resolutions.
+                    </p>
+                </div>
+            </div>
+            <div>
+                <button class="try-btn1">Try AI Voice Agent for Free</button>
+            </div>
+        </div>
+
+        </div>
+    </section>
+
+
+    <section class="container">
+        <div>
+            <h2 class="section-title">See AI Voice Agent in Action</h2>
+            <p class="section-subtitle1">
+                quick demo to explore the features and functionalities of CallHippo’s AI Voice Agent dashboard, designed
+                for automating calls.
+            </p>
+        </div>
+        <div class="demo-call-section fade-up">
+            <h2 class="section-title">Simulate a Demo Call</h2>
+            <p class="section-subtitle">
+                Experience how our AI Voice Agent interacts in real-time. Choose a scenario below and simulate a call
+                instantly.
+            </p>
+
+            <div class="demo-box">
+                <div class="demo-select">
+                    <label for="demoType">Select Demo Type:</label>
+                    <select id="demoType">
+                        <option>Customer Support</option>
+                        <option>Order Confirmation</option>
+                        <option>Service Appointment Booking</option>
+                    </select>
+                </div>
+
+                <button class="simulate-btn">🎧 Start Demo Call</button>
+            </div>
+
+            <p class="demo-note">*(This is a simulated demo experience — no actual call will be placed.)*</p>
+        </div>
+    </section>
+
+    <section class="why-choose-section fade-up">
+        <div class="container">
+            <h2 class="section-title">Why Choose Our AI Voice Agent for Inbound Success?</h2>
+
+            <div class="reasons-grid">
+                <div class="reason-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1103/1103679.png" alt="Instant Response" />
+                    <h3>Instant Response</h3>
+                    <p>Never miss a lead or query again — our AI answers every inbound call in seconds.</p>
+                </div>
+                <div class="reason-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1041/1041916.png" alt="Multilingual" />
+                    <h3>Multilingual Capabilities</h3>
+                    <p>Speak your customer’s language — support for over 20 global and regional languages.</p>
+                </div>
+                <div class="reason-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png" alt="CRM Integration" />
+                    <h3>CRM Integration</h3>
+                    <p>Seamlessly sync call data with your existing CRM or business system.</p>
+                </div>
+                <div class="reason-card">
+                    <img src="https://cdn-icons-png.flaticon.com/512/4727/4727470.png" alt="Analytics" />
+                    <h3>Analytics & Insights</h3>
+                    <p>Track performance, monitor customer sentiment, and optimize conversions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="container">
+        <div class="demo-call-section1 fade-up">
+           
+            <h2 class="section-title">Built for Businesses That Don’t Hit Pause</h2>
+            <p class="section-subtitle2">
+                Our AI Voice Agent powers interactions for brands that thrive on efficiency and growth. Automate,
+                optimize, and deliver results, all in one platform.
+            </p>
+            <div>
+                <button class="try-btn1">Talk to an Expert</button>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="links">
+            <a href="#">Home</a>|
+            <a href="#">Features</a>|
+            <a href="#">Pricing</a>|
+            <a href="#">Contact</a>
+        </div>
+
+        <div class="socials">
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M22.46 6c-.77.35-1.6.59-2.46.69a4.3 4.3 0 0 0 1.89-2.37 8.59 8.59 0 0 1-2.72 1.04A4.27 4.27 0 0 0 16 4a4.28 4.28 0 0 0-4.27 4.28c0 .34.04.67.1 1A12.12 12.12 0 0 1 3.15 5.1a4.27 4.27 0 0 0 1.32 5.7 4.2 4.2 0 0 1-1.94-.54v.05a4.27 4.27 0 0 0 3.43 4.19 4.23 4.23 0 0 1-1.12.15 3.9 3.9 0 0 1-.8-.08 4.28 4.28 0 0 0 3.99 2.97A8.56 8.56 0 0 1 2 19.54a12.06 12.06 0 0 0 6.56 1.92c7.87 0 12.17-6.52 12.17-12.17 0-.19 0-.37-.01-.56A8.66 8.66 0 0 0 22.46 6z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M19 0h-14C2.2 0 0 2.2 0 5v14c0 2.8 2.2 5 5 5h7V15h-2v-3h2v-2c0-2.2 1.8-4 4-4h3v3h-3c-.5 0-1 .5-1 1v2h4l-1 3h-3v9h4c2.8 0 5-2.2 5-5V5c0-2.8-2.2-5-5-5z" />
+            </svg>
+            <svg viewBox="0 0 24 24">
+                <path
+                    d="M12 2.04c-5.5 0-10 4.45-10 9.95 0 4.41 3.6 8.07 8.2 8.88v-6.28H8.1v-2.6h2.1V9.76c0-2.1 1.27-3.26 3.17-3.26.9 0 1.84.16 1.84.16v2.02h-1.04c-1.03 0-1.35.63-1.35 1.28v1.53h2.31l-.37 2.6h-1.94v6.28c4.6-.81 8.2-4.47 8.2-8.88 0-5.5-4.5-9.95-10-9.95z" />
+            </svg>
+        </div>
+
+        <p>© 2025 AI Voice Agent | All rights reserved</p>
+    </footer>
+
+</body>
+
+</html>
+
+<style>
+    .container {
+        max-width: 1100px;
+        margin: auto;
+        padding: 60px 20px;
+        text-align: center;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1d1d1d;
+        margin-bottom: 15px;
+    }
+
+    .section-title1 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 15px;
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 40px;
+    }
+
+    .section-subtitle2 {
+        font-size: 1.1rem;
+        color: #000;
+        margin-bottom: 40px;
+    }
+
+
+    .reasons-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 25px;
+        padding: 10px 0px;
+    }
+
+
+    .reason-card {
+        background: #ffffff;
+        border: 1px solid #eee;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+        transition: all 0.35s ease;
+
+    }
+
+
+    .reason-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    }
+
+
+    .reason-card img {
+        width: 64px;
+        margin-bottom: 15px;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        color: #1f1f26;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+        color: #555;
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto 3rem;
+        line-height: 1.6;
+    }
+
+    .section-subtitle1 {
+        color: #555;
+        font-size: 1.1rem;
+        max-width: 700px;
+        margin: 0 auto 3rem;
+        line-height: 1.6;
+        text-align: 'center';
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(336px, 1fr));
+        gap: 25px;
+        padding: 10px 0px;
+    }
+
+    .feature-card {
+        background: #ffffff;
+        border: 1px solid #eee;
+        border-radius: 18px;
+        padding: 25px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+        transition: all 0.35s ease;
+        animation: fadeIn 1.2s ease;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+        border-color: #e2e6ff;
+    }
+
+    .feature-card img {
+        width: 40px;
+        margin-bottom: 15px;
+        transition: transform 0.3s;
+    }
+
+    .feature-card:hover img {
+        transform: scale(1.1);
+    }
+
+    .demo-call-section {
+        background: linear-gradient(180deg, #f7faff, #ffffff);
+        border-top: 1px solid #e6e9f0;
+        border-bottom: 1px solid #e6e9f0;
+        padding: 12px 12px;
+    }
+
+    .demo-call-section1 {
+        background: #fff;
+        border-radius: 20px;
+        border-top: 1px solid #e6e9f0;
+        border-bottom: 1px solid #e6e9f0;
+        padding: 12px 12px;
+    }
+
+    .demo-box {
+        background: #fff;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        display: inline-block;
+        text-align: left;
+    }
+
+    .demo-select {
+        margin-bottom: 15px;
+    }
+
+    .demo-select label {
+        font-weight: 600;
+        margin-right: 10px;
+    }
+
+    .simulate-btn {
+        background: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 25px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.3s ease;
+    }
+
+    .simulate-btn:hover {
+        background: #0056b3;
+    }
+
+    .demo-note {
+        font-size: 0.9rem;
+        color: #777;
+        margin-top: 15px;
+    }
+
+    /* Animation */
+    .fade-up {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-up.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+</style>
+
+<!-- ✨ Animation Script -->
+<script>
+    const fadeElems = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('visible');
+        });
+    }, { threshold: 0.2 });
+
+    fadeElems.forEach(elem => observer.observe(elem));
+</script>
